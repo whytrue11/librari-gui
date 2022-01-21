@@ -33,6 +33,8 @@ public class ProfileDirector extends JFrame {
   private JButton employeesDirectorButton;
   private JButton profileDirectorButton;
   private JPanel directorProfilePanel;
+  private JButton genresButton;
+  private JButton readerButton;
 
   public ProfileDirector(Point point) {
     try {
@@ -52,6 +54,9 @@ public class ProfileDirector extends JFrame {
     debtorsDirectorButton.setBorderPainted(false);
     employeesDirectorButton.setBorderPainted(false);
     profileDirectorButton.setBorderPainted(false);
+
+    genresButton.setBorderPainted(false);
+    readerButton.setBorderPainted(false);
 
     menuPanel.setPreferredSize(new Dimension(Tools.WIDTH / 5, Tools.HEIGHT));
 
@@ -92,6 +97,20 @@ public class ProfileDirector extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
         AuthorizationPage authorizationPage = new AuthorizationPage();
+        setVisible(false);
+      }
+    });
+    genresButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        GenreDirector genreDirector = new GenreDirector(getLocation());
+        setVisible(false);
+      }
+    });
+    readerButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        ReadersDirector readersDirector = new ReadersDirector(getLocation());
         setVisible(false);
       }
     });

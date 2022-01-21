@@ -44,6 +44,8 @@ public class CatalogLibrarian extends JFrame {
   private JButton bookUpdateButton;
   private JPanel tablePanel;
   private JPanel genreComboBoxPanel;
+  private JButton giveBooksButton;
+  private JTextArea userLoginField;
 
   private final JTable table;
   private final Vector<Vector<String>> dataArrayList;
@@ -96,6 +98,8 @@ public class CatalogLibrarian extends JFrame {
     table = new JTable(dataArrayList, header);
     JScrollPane scrollPane = new JScrollPane(table);
     tablePanel.add(scrollPane);
+
+    userLoginField.setText("Login");
 
     updateTableData();
 
@@ -282,6 +286,52 @@ public class CatalogLibrarian extends JFrame {
         } catch (SQLException throwables) {
           Error error = new Error();
         }
+      }
+    });
+    giveBooksButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String userLogin = userLoginField.getText();
+
+        Vector<Vector<String>> takenBooks = new Vector<>();
+        for (int rowIndex : table.getSelectedRows()) {
+          takenBooks.add(dataArrayList.get(rowIndex));
+        }
+
+        for (Vector<String> book : takenBooks) {
+          String name = book.get(1);
+          String releaseDate = book.get(2);
+          String authorFIO = book.get(3);
+          String numberOfPage = book.get(4);
+
+          Statement statement = null;
+          try {
+            statement = DBconnection.connection.createStatement();
+
+            if (releaseDate.isEmpty()) {
+              statement.execute(
+                  "DECLARE @BookId int\n" +
+                      "SET @BookId = (SELECT IdBook FROM Book WHERE [Name] = " + "'" + name + "'" + "AND ReleaseDate IS NULL" +
+                      " AND AuthorFIO = " + "'" + authorFIO + "'" + " AND NumberOfPage = " + "'" + numberOfPage + "')\n" +
+                      "DECLARE @ReaderId int\n" +
+                      "SET @ReaderId = (SELECT IdReader FROM Reader JOIN [User] ON [User].IdUser = Reader.UserId WHERE Login ='" + userLogin + "')\n" +
+                      "EXEC IssueBook @ReaderId, @BookId");
+            }
+            else {
+              statement.execute(
+                  "DECLARE @BookId int\n" +
+                      "SET @BookId = (SELECT IdBook FROM Book WHERE [Name] = " + "'" + name + "'" + "AND ReleaseDate = " + "'" + releaseDate + "'" +
+                      " AND AuthorFIO = " + "'" + authorFIO + "'" + " AND NumberOfPage = " + "'" + numberOfPage + "')\n" +
+                      "DECLARE @ReaderId int\n" +
+                      "SET @ReaderId = (SELECT IdReader FROM Reader JOIN [User] ON [User].IdUser = Reader.UserId WHERE Login ='" + userLogin + "')\n" +
+                      "EXEC IssueBook @ReaderId, @BookId");
+            }
+          } catch (SQLException throwables) {
+            throwables.printStackTrace();
+          }
+        }
+
+        updateTableData();
       }
     });
   }

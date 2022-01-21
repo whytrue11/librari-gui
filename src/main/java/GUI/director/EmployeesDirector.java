@@ -36,6 +36,11 @@ public class EmployeesDirector extends JFrame {
   private JLabel libraryLabelR;
   private JButton addEmployeeDirectorButton;
   private JPanel postComboBoxPanel;
+  private JTextField employeeIdField;
+  private JLabel employeeId;
+  private JButton updateEmployee;
+  private JButton genresButton;
+  private JButton readerButton;
 
   private final JTable table;
   private final Vector<Vector<String>> dataArrayList;
@@ -52,6 +57,9 @@ public class EmployeesDirector extends JFrame {
     debtorsDirectorButton.setBorderPainted(false);
     employeesDirectorButton.setBorderPainted(false);
     profileDirectorButton.setBorderPainted(false);
+
+    genresButton.setBorderPainted(false);
+    readerButton.setBorderPainted(false);
 
     menuPanel.setPreferredSize(new Dimension(Tools.WIDTH / 5, Tools.HEIGHT));
 
@@ -113,6 +121,20 @@ public class EmployeesDirector extends JFrame {
         setVisible(false);
       }
     });
+    genresButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        GenreDirector genreDirector = new GenreDirector(getLocation());
+        setVisible(false);
+      }
+    });
+    readerButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        ReadersDirector readersDirector = new ReadersDirector(getLocation());
+        setVisible(false);
+      }
+    });
     addEmployeeDirectorButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -134,7 +156,66 @@ public class EmployeesDirector extends JFrame {
           statement.execute(
               "DECLARE @PostId int\n" +
                   "SET @PostId = (SELECT IdPost FROM Post WHERE Post.Name = '" + postComboBox.getSelectedItem() + "')\n" +
-                  "EXEC EmployeeRegistration '" + login + "', '" + password + "', '"  + fio + "', '" + phone + "', '" + mail + "', @PostId");
+                  "EXEC EmployeeRegistration '" + login + "', '" + password + "', '" + fio + "', '" + phone + "', '" + mail + "', @PostId");
+        } catch (SQLException throwables) {
+          Error error = new Error();
+          throwables.printStackTrace();
+        }
+
+        updateTableData();
+      }
+    });
+    updateEmployee.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String employeeId = employeeIdField.getText();
+
+        //String login = loginField.getText();
+        //String password = new String(passwordField.getPassword());
+        //password = Integer.toString(password.hashCode());
+
+        String fio = fioField.getText();
+        String phone = phoneField.getText();
+        String mail = mailField.getText();
+
+        if (/*login.isEmpty() || password.isEmpty() ||*/ fio.isEmpty() || phone.isEmpty() || mail.isEmpty()) {
+          Error error = new Error();
+          return;
+        }
+
+        try {
+          Statement statement = DBconnection.connection.createStatement();
+
+          /*ResultSet resultSet = statement.executeQuery(
+              "SELECT IdUser FROM [User] JOIN Employee ON Employee.UserId = [User].IdUser WHERE IdEmployee = " + employeeId);
+          resultSet.next();
+          String userId = resultSet.getString("IdUser");*/
+
+          /*statement.executeUpdate(
+              "UPDATE [User]\n" +
+                  "SET Login = '" + login + "' \n" +
+                  "WHERE IdUser = '" + userId + "'");
+          statement.executeUpdate(
+              "UPDATE [User]\n" +
+                  "SET Password = '" + password + "' \n" +
+                  "WHERE IdUser = '" + userId + "'");*/
+          statement.executeUpdate(
+              "\nUPDATE Employee\n" +
+                  "SET FIO = '" + fio + "' \n" +
+                  "WHERE IdEmployee = '" + employeeId + "'");
+          statement.executeUpdate(
+              "\nUPDATE Employee\n" +
+                  "SET Phone = '" + phone + "' \n" +
+                  "WHERE IdEmployee = '" + employeeId + "'");
+          statement.executeUpdate(
+              "\nUPDATE Employee\n" +
+                  "SET Email = '" + mail + "' \n" +
+                  "WHERE IdEmployee = '" + employeeId + "'");
+          statement.executeUpdate(
+              "\nUPDATE Employee\n" +
+                  "SET Email = '" + mail + "' \n" +
+                  "WHERE IdEmployee = '" + employeeId + "'");
+
         } catch (SQLException throwables) {
           Error error = new Error();
           throwables.printStackTrace();

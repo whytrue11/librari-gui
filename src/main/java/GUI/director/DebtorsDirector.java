@@ -30,6 +30,8 @@ public class DebtorsDirector extends JFrame {
   private JButton profileDirectorButton;
   private JTextField debtCountField;
   private JButton searchDebtorsButton;
+  private JButton genresButton;
+  private JButton readerButton;
 
   private final JTable table;
   private final Vector<Vector<String>> dataArrayList;
@@ -55,13 +57,16 @@ public class DebtorsDirector extends JFrame {
     profileDirectorButton.setBorderPainted(false);
     searchDebtorsButton.setBorderPainted(false);
 
+    genresButton.setBorderPainted(false);
+    readerButton.setBorderPainted(false);
+
     menuPanel.setPreferredSize(new Dimension(Tools.WIDTH / 5, Tools.HEIGHT));
 
     //table
     dataArrayList = new Vector<>();
     Vector<String> header = new Vector<>();
-    header.add("User id");
-    header.add("Reader id");
+    //header.add("User id");
+    //header.add("Reader id");
     header.add("FIO");
     header.add("Phone");
     header.add("Mail");
@@ -129,6 +134,20 @@ public class DebtorsDirector extends JFrame {
         updateTableData();
       }
     });
+    genresButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        GenreDirector genreDirector = new GenreDirector(getLocation());
+        setVisible(false);
+      }
+    });
+    readerButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        ReadersDirector readersDirector = new ReadersDirector(getLocation());
+        setVisible(false);
+      }
+    });
   }
 
   private void updateTableData() {
@@ -151,8 +170,8 @@ public class DebtorsDirector extends JFrame {
       dataArrayList.clear();
       while (resultSet.next()) {
         Vector<String> row = new Vector<>();
-        row.add(resultSet.getString("UserId"));
-        row.add(resultSet.getString("IdReader"));
+        //row.add(resultSet.getString("UserId"));
+        //row.add(resultSet.getString("IdReader"));
         row.add(resultSet.getString("FIO"));
         row.add(resultSet.getString("Phone"));
         row.add(resultSet.getString("Email"));

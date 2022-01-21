@@ -283,6 +283,22 @@
           <text value="Delete books"/>
         </properties>
       </component>
+      <component id="54403" class="javax.swing.JButton" binding="giveBooksButton">
+        <constraints>
+          <grid row="14" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Give books"/>
+        </properties>
+      </component>
+      <component id="ed485" class="javax.swing.JTextArea" binding="userLoginField">
+        <constraints>
+          <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font size="12"/>
+        </properties>
+      </component>
     </children>
   </grid>
   <inspectionSuppressions>

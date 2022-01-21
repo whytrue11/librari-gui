@@ -141,46 +141,6 @@ public class CatalogReader extends JFrame {
         }
       }
     });
-    takeBookButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        Vector<Vector<String>> takenBooks = new Vector<>();
-        for (int rowIndex : table.getSelectedRows()) {
-          takenBooks.add(dataArrayList.get(rowIndex));
-        }
-
-        for (Vector<String> book : takenBooks) {
-          String name = book.get(0);
-          String releaseDate = book.get(1);
-          String authorFIO = book.get(2);
-          String numberOfPage = book.get(3);
-
-          Statement statement = null;
-          try {
-            statement = DBconnection.connection.createStatement();
-
-            if (releaseDate.isEmpty()) {
-              statement.execute(
-                  "DECLARE @BookId int\n" +
-                      "SET @BookId = (SELECT IdBook FROM Book WHERE [Name] = " + "'" + name + "'" + "AND ReleaseDate IS NULL" +
-                      " AND AuthorFIO = " + "'" + authorFIO + "'" + " AND NumberOfPage = " + "'" + numberOfPage + "')\n" +
-                      "EXEC IssueBook " + Tools.userRoleId + ", " + "@BookId");
-            }
-            else {
-              statement.execute(
-                  "DECLARE @BookId int\n" +
-                      "SET @BookId = (SELECT IdBook FROM Book WHERE [Name] = " + "'" + name + "'" + "AND ReleaseDate = " + "'" + releaseDate
-                      + "'" + " AND AuthorFIO = " + "'" + authorFIO + "'" + " AND NumberOfPage = " + "'" + numberOfPage + "')\n" +
-                      "EXEC IssueBook " + Tools.userRoleId + ", " + "@BookId");
-            }
-          } catch (SQLException throwables) {
-            throwables.printStackTrace();
-          }
-        }
-
-        updateTableData();
-      }
-    });
   }
 
   private void updateTableData() {

@@ -34,6 +34,11 @@ public class AuthorizationPage extends JFrame {
       e.printStackTrace();
     }
 
+    /*//-------------TEST-------------------
+    loginField.setText("admin");
+    passwordField.setText("admin");
+    //------------------------------------*/
+
     setVisible(true);
 
     logInButton.addActionListener(new ActionListener() {
